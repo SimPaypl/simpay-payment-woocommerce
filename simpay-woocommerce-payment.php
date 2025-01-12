@@ -34,17 +34,17 @@ function simpay_woocommerce_payment_init() {
 	}
 }
 
-add_action('enqueue_block_assets', 'simpay_woocommerce_payment_block_assets');
+add_action( 'enqueue_block_assets', 'simpay_woocommerce_payment_block_assets' );
 
 function simpay_woocommerce_payment_block_assets() {
-	if (!function_exists('is_checkout') || !is_checkout()) {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return;
 	}
 
 	wp_enqueue_script(
 		'simpay_woocommerce_payment_blocks_integration',
-		plugins_url('assets/js/simpay_woocommerce_payment_blocks_integration.js', __FILE__),
-		array('wc-blocks-registry', 'wp-element', 'wp-i18n', 'wp-hooks'),
+		plugins_url( 'assets/js/simpay_woocommerce_payment_blocks_integration.js', __FILE__ ),
+		array( 'wc-blocks-registry', 'wp-element', 'wp-i18n', 'wp-hooks' ),
 		'1.0.0',
 		true
 	);

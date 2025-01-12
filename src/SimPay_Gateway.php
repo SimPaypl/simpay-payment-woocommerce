@@ -12,8 +12,8 @@ class SimPay_Gateway extends WC_Payment_Gateway {
 		$this->method_description = 'Wygodne przyjmowanie płatności online i BLIK';
 		$this->init_form_fields();
 		$this->init_settings();
-		$this->title = $this->get_option( 'title', 'SimPay.pl' );
-		$this->description =$this->get_option( 'description', 'Zapłać przez SimPay.pl' );
+		$this->title       = $this->get_option( 'title', 'SimPay.pl' );
+		$this->description = $this->get_option( 'description', 'Zapłać przez SimPay.pl' );
 
 		$this->supports = array(
 			'products'
@@ -35,7 +35,7 @@ class SimPay_Gateway extends WC_Payment_Gateway {
 			$this->get_option( 'simpay_service_hash' ),
 			$this->get_option( 'simpay_service_id' ),
 			$this->get_option( 'simpay_bearer' ),
-            $this->get_option('simpay_ipn_check_ip') === 'yes',
+			$this->get_option( 'simpay_ipn_check_ip' ) === 'yes',
 		);
 	}
 
@@ -53,7 +53,7 @@ class SimPay_Gateway extends WC_Payment_Gateway {
 				'type'        => 'text',
 				'default'     => __( 'SimPay.pl', 'woocommerce' ),
 			),
-			'description'               => array(
+			'description'         => array(
 				'title'       => __( 'Opis metody płatności', 'simpay_woocommerce_payment' ),
 				'description' => __( 'Ten opis będzie widoczny dla kupującego w momencie wybierania metody płatności', 'simpay_woocommerce_payment' ),
 				'type'        => 'text',
