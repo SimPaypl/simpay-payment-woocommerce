@@ -162,7 +162,7 @@ class SimPay_Gateway extends WC_Payment_Gateway {
         <div style="margin-bottom:40px;">
             <h4>Adres IPN do ustawienia w Panelu SimPay:</h4>
             <code>
-				<?= str_replace( 'http:', 'https:', add_query_arg( 'wc-api', $this->id, home_url( '/' ) ) ) ?>
+				<?= esc_url(add_query_arg( 'wc-api', $this->id, home_url( '/', 'https'))); ?>
             </code>
         </div>
 
