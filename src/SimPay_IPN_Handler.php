@@ -5,7 +5,6 @@ class SimPay_IPN_Handler {
 	public function handle(
 		string $serviceHash,
 		string $serviceId,
-		string $bearerToken,
 		bool $validateIp,
 	) {
 		if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
@@ -40,6 +39,10 @@ class SimPay_IPN_Handler {
 
 		if ( ! hash_equals( $this->calculate_signature( $payload, $serviceHash ), $payload['signature'] ) ) {
 			$this->error( 'invalid signature' );
+		}
+
+		if ( $payload['service_id'] !== $serviceId ) {
+			$this->error( 'invalid service_id' );
 		}
 
 		if ( $payload['status'] !== 'transaction_paid' ) {

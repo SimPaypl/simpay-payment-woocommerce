@@ -34,7 +34,6 @@ class SimPay_Gateway extends WC_Payment_Gateway {
 		return ( new SimPay_IPN_Handler() )->handle(
 			$this->get_option( 'simpay_service_hash' ),
 			$this->get_option( 'simpay_service_id' ),
-			$this->get_option( 'simpay_bearer' ),
 			$this->get_option( 'simpay_ipn_check_ip' ) === 'yes',
 		);
 	}

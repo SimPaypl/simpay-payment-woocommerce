@@ -3,9 +3,11 @@
  * Plugin Name:       SimPay.pl Płatności Online WooCommerce
  * Plugin URI:        https://simpay.pl
  * Description:       Wtyczka WooCommerce, która umożliwi Ci przyjmowanie płatności Online
- * Version:           1.0.0
- * Author:            Patryk Vizauer
- * Author URI:        https://github.com/PatryQHyper
+ * Version:           1.0.1
+ * Author:            Payments Solution Sp. z o.o.
+ * Author URI:        https://simpay.pl
+ * Developer:         Patryk Vizauer
+ * Developer URI:     https://github.com/PatryQHyper
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       simpay_woocommerce_payment
@@ -49,5 +51,3 @@ function simpay_woocommerce_payment_block_assets() {
 		true
 	);
 }
-
-//simpay_payment_gateway
