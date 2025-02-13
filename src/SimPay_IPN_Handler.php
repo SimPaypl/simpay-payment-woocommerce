@@ -5,7 +5,7 @@ class SimPay_IPN_Handler {
 	public function handle(
 		string $serviceHash,
 		string $serviceId,
-		bool $validateIp,
+		bool $validateIp
 	) {
 		if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
 			$this->error( 'Method not allowed' );
