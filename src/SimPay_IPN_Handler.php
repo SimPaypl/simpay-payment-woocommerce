@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/SimPay_IPN_V2_Handler.php';
+
 class SimPay_IPN_Handler {
 
 	public function handle(
@@ -7,6 +9,20 @@ class SimPay_IPN_Handler {
 		string $serviceId,
 		bool $validateIp
 	) {
+
+		$payload = json_decode( @file_get_contents( 'php://input' ), true );
+		if ( empty( $payload ) ) {
+			$this->error( 'Cannot read payload' );
+		}
+
+
+		if ( $this->is_ipn_v2( $payload ) ) {
+			$v2_handler = new SimPay_IPN_V2_Handler();
+			$v2_handler->handle( $serviceHash, $serviceId, $validateIp );
+			return;
+		}
+
+
 		if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
 			$this->error( 'Method not allowed' );
 		}
@@ -111,5 +127,29 @@ class SimPay_IPN_Handler {
 		} );
 
 		return $return;
+	}
+
+
+	private function is_ipn_v2( array $payload ): bool {
+		$v2_fields = [ 'type', 'notification_id', 'date', 'data' ];
+		$v1_fields = [ 'id', 'service_id', 'status', 'amount', 'control', 'channel', 'environment' ];
+
+		$has_v2_fields = true;
+		foreach ( $v2_fields as $field ) {
+			if ( ! isset( $payload[ $field ] ) ) {
+				$has_v2_fields = false;
+				break;
+			}
+		}
+		if ( $has_v2_fields ) {
+			return true;
+		}
+		$v1_field_count = 0;
+		foreach ( $v1_fields as $field ) {
+			if ( isset( $payload[ $field ] ) ) {
+				$v1_field_count++;
+			}
+		}
+		return $v1_field_count < 5;
 	}
 }
