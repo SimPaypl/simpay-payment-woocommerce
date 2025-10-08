@@ -16,7 +16,7 @@ class SimPay_IPN_Handler {
 		}
 
 
-		if ( $this->is_ipn_v2( $payload ) ) {
+		if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'SimPay-IPN/2.0') {
 			$v2_handler = new SimPay_IPN_V2_Handler();
 			$v2_handler->handle( $serviceHash, $serviceId, $validateIp );
 			return;
@@ -127,29 +127,5 @@ class SimPay_IPN_Handler {
 		} );
 
 		return $return;
-	}
-
-
-	private function is_ipn_v2( array $payload ): bool {
-		$v2_fields = [ 'type', 'notification_id', 'date', 'data' ];
-		$v1_fields = [ 'id', 'service_id', 'status', 'amount', 'control', 'channel', 'environment' ];
-
-		$has_v2_fields = true;
-		foreach ( $v2_fields as $field ) {
-			if ( ! isset( $payload[ $field ] ) ) {
-				$has_v2_fields = false;
-				break;
-			}
-		}
-		if ( $has_v2_fields ) {
-			return true;
-		}
-		$v1_field_count = 0;
-		foreach ( $v1_fields as $field ) {
-			if ( isset( $payload[ $field ] ) ) {
-				$v1_field_count++;
-			}
-		}
-		return $v1_field_count < 5;
 	}
 }
