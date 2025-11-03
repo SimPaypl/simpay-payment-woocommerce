@@ -1,5 +1,4 @@
 <?php
-
 class SimPay_IPN_V2_Handler
 {
 
@@ -31,13 +30,7 @@ class SimPay_IPN_V2_Handler
 		return $return;
 	}
 
-	/**
-	 * Handle IPN v2 notifications
-	 *
-	 * @param string $serviceHash Service hash key from SimPay panel
-	 * @param string $serviceId   Service ID
-	 * @param bool   $validateIp  Whether to validate IP address
-	 */
+	
 	public function handle(
 		string $serviceHash,
 		string $serviceId,
@@ -103,9 +96,6 @@ class SimPay_IPN_V2_Handler
 		die();
 	}
 
-	/**
-	 * Handle transaction status changed event
-	 */
 	private function handle_transaction_status_changed(array $data)
 	{
 		if ($data['status'] !== 'transaction_paid') {
@@ -149,9 +139,6 @@ class SimPay_IPN_V2_Handler
 		));
 	}
 
-	/**
-	 * Handle refund status changed event
-	 */
 	private function handle_refund_status_changed(array $data)
 	{
 		if ($data['status'] !== 'refund_completed') {
@@ -220,25 +207,11 @@ class SimPay_IPN_V2_Handler
 		));
 	}
 
-	/**
-	 * Handle test notification
-	 */
 	private function handle_test_notification(array $data)
 	{
 		error_log('SimPay IPN v2 Test notification received for service: ' . $data['service_id']);
 	}
 
-	/**
-	 * Handle BLIK Level 0 code status changed event
-	 */
-	private function handle_blik_code_status_changed(array $data)
-	{
-		return; // Currently no action needed
-	}
-
-	/**
-	 * Send error response and exit
-	 */
 	private function error(string $message)
 	{
 		if (! headers_sent()) {
@@ -249,9 +222,6 @@ class SimPay_IPN_V2_Handler
 		die();
 	}
 
-	/**
-	 * Get client IP address
-	 */
 	private function get_ip(): string
 	{
 		if (! empty($_SERVER['HTTP_CLIENT_IP'])) {
