@@ -4,7 +4,6 @@ const { __ } = window.wp?.i18n ?? {};
 
 if (!registerPaymentMethod) {
     console.error('registerPaymentMethod missing — blocks not loaded');
-    return;
 }
 
 registerPaymentMethod({
