@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/SimPay_IPN_V2_Handler.php';
+
 class SimPay_IPN_Handler {
 
 	public function handle(
@@ -7,6 +9,20 @@ class SimPay_IPN_Handler {
 		string $serviceId,
 		bool $validateIp
 	) {
+
+		$payload = json_decode( @file_get_contents( 'php://input' ), true );
+		if ( empty( $payload ) ) {
+			$this->error( 'Cannot read payload' );
+		}
+
+
+		if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'SimPay-IPN/2.0') {
+			$v2_handler = new SimPay_IPN_V2_Handler();
+			$v2_handler->handle( $serviceHash, $serviceId, $validateIp );
+			return;
+		}
+
+
 		if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
 			$this->error( 'Method not allowed' );
 		}
