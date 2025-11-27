@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+
 add_action( 'plugins_loaded', 'simpay_woocommerce_payment_init' );
 
 function simpay_woocommerce_payment_init() {
@@ -36,18 +38,34 @@ function simpay_woocommerce_payment_init() {
 	}
 }
 
-add_action( 'enqueue_block_assets', 'simpay_woocommerce_payment_block_assets' );
+add_action( 'woocommerce_blocks_loaded', function () {
+    if ( ! class_exists( \Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType::class ) ) {
+        return;
+    }
 
-function simpay_woocommerce_payment_block_assets() {
-	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
-		return;
-	}
+    require_once __DIR__ . '/src/SimPay_Blocks_Support.php';
 
-	wp_enqueue_script(
-		'simpay_woocommerce_payment_blocks_integration',
-		plugins_url( 'assets/js/simpay_woocommerce_payment_blocks_integration.js', __FILE__ ),
-		array( 'wc-blocks-registry', 'wp-element', 'wp-i18n', 'wp-hooks' ),
-		'1.0.4',
-		true
-	);
-}
+    add_action(
+        'woocommerce_blocks_payment_method_type_registration',
+        function ( PaymentMethodRegistry $payment_method_registry ) {
+            $payment_method_registry->register( new \SimPay_Blocks_Support() );
+        }
+    );
+});
+
+
+//add_action( 'enqueue_block_assets', 'simpay_woocommerce_payment_block_assets' );
+//
+//function simpay_woocommerce_payment_block_assets() {
+//	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+//		return;
+//	}
+//
+//	wp_enqueue_script(
+//		'simpay_woocommerce_payment_blocks_integration',
+//		plugins_url( 'assets/js/simpay_woocommerce_payment_blocks_integration.js', __FILE__ ),
+//		array( 'wc-blocks-registry', 'wp-element', 'wp-i18n', 'wp-hooks' ),
+//		'1.0.4',
+//		true
+//	);
+//}
