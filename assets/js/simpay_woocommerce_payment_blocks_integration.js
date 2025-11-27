@@ -1,11 +1,10 @@
-if (typeof registerPaymentMethod == "undefined") {
-    const {registerPaymentMethod} = wc.wcBlocksRegistry;
-}
-if (typeof createElement == "undefined") {
-    const {createElement} = wp.element;
-}
-if (typeof __ == "undefined") {
-    const {__} = wp.i18n;
+const { registerPaymentMethod } = window.wc?.wcBlocksRegistry ?? {};
+const { createElement } = window.wp?.element ?? {};
+const { __ } = window.wp?.i18n ?? {};
+
+if (!registerPaymentMethod) {
+    console.error('registerPaymentMethod missing — blocks not loaded');
+    return;
 }
 
 registerPaymentMethod({
