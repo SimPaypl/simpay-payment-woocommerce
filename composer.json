@@ -1,0 +1,23 @@
+{
+  "name": "simpay/woocommerce-gateway",
+  "description": "SimPay Online Payments for WooCommerce",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "SimPay Core Team"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "SimPay\\WooCommerce\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.0"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+  }
+}

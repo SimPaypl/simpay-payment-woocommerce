@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+
+      - name: Install composer dependencies
+        run: composer install --no-dev
+
+      - name: Prepare zip package
+        run: |
+          set -e
+          ZIP="simpay-woocommerce-payment.zip"
+          mkdir -p simpay-woocommerce-payment
+          cp -r assets languages src vendor composer.json composer.lock README.md simpay-woocommerce-payment.php
+          zip -r "${ZIP}" simpay-woocommerce-payment
+          sha256sum "${ZIP}" | tee "${ZIP}.sha256"
+
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ github.ref_name }}"
+          name: "${{ github.ref_name }}"
+          generateReleaseNotes: true
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: |
+            simpay-woocommerce-payment.zip

@@ -1,0 +1,185 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SimPay Online Payments for WooCommerce\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-15 19:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.3.29\n"
+"X-Domain: simpay"
+
+#. Description of the plugin
+msgid ""
+"Accept fast and secure online payments with SimPay – BLIK, online transfers "
+"and instant payments. Easy integration and smooth checkout for your "
+"customers."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:54
+msgid "API password"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:14
+msgid "Choose payment method."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:46
+#, php-format
+msgid "Configure API credentials in <a href=\"%s\">SimPay Global Settings</a>."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:52
+msgid "Configure SimPay API credentials used by all payment methods."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:52
+msgid "Configuring the SimPay connection to the store"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:54
+msgid "Customer account → API → Details → Password / Bearer Token"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:63
+msgid "Description of payment method"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://simpay.pl"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:56
+msgid ""
+"If your shop is using Cloudflare, we do not recommend enabling this option."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:55
+msgid "IPN signature key"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:75
+msgid "Note: This gateway is only visible for PLN currency."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:21
+msgid "Online payment by BLIK"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:29
+msgid "Online payment by BLIK Pay Later"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:37
+msgid "Online payment by PayPo"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:13
+msgid "Online payment by SimPay"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:53
+msgid "Online payments → Services → Details → Service ID"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:55
+msgid "Online payments → Services → Details → Settings → IPN signature key"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/PaymentsService.php:46
+msgid "Order #%d"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:27
+msgid "Pay with SimPay payment gateway."
+msgstr ""
+
+#. Author of the plugin
+msgid "Payments Solution Sp. z o.o."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:53
+msgid "Service ID"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:61
+#, php-format
+msgid "Set this URL in SimPay panel as webhook/notification URL: %s"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:20
+msgid "SimPay - BLIK"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:28
+msgid "SimPay - BLIK Pay Later"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:12
+msgid "SimPay - payment gateway"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:36
+msgid "SimPay - PayPo"
+msgstr ""
+
+#. Name of the plugin
+msgid "SimPay Online Payments for WooCommerce"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:35
+msgid "SimPay payment gateway for WooCommerce."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:77
+msgid "SimPay requires WooCommerce to be installed and active."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:32
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:33
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:77
+msgid "SimPay settings"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:64
+msgid ""
+"This description will be available to the buyer when selecting payment "
+"methods"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:58
+msgid ""
+"This title will be available to the buyer when selecting payment methods"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:57
+msgid "Title of payment method"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:51
+msgid "Turn on / Turn off"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:52
+msgid "Turn on payment method"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:56
+msgid "Verify incoming IP address in IPN notifications"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:59
+msgid "Webhooks"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:72
+msgid "You do not have permission to access this page."
+msgstr ""

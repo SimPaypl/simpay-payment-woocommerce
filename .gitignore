@@ -1,2 +1,6 @@
-.idea/
+vendor/
 .vscode/
+composer.lock
+.idea
+.DS_Store
+No newline at end of file

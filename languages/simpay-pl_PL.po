@@ -1,0 +1,124 @@
+#. Description of the plugin
+msgid ""
+"Accept fast and secure online payments with SimPay – BLIK, online transfers "
+"and instant payments. Easy integration and smooth checkout for your "
+"customers."
+msgstr ""
+"Akceptuj szybkie i bezpieczne płatności online z SimPay – BLIK, przelewy "
+"online oraz płatności natychmiastowe. Prosta integracja i płynny proces "
+"zakupu dla Twoich klientów."
+
+msgid "API password"
+msgstr "Hasło API"
+
+msgid "Choose payment method."
+msgstr "Wybierz metodę płatności."
+
+#, php-format
+msgid "Configure API credentials in <a href=\"%s\">SimPay Global Settings</a>."
+msgstr "Skonfiguruj dane API w <a href=\"%s\">Ustawieniach globalnych SimPay</a>."
+
+msgid "Configure SimPay API credentials used by all payment methods."
+msgstr "Skonfiguruj dane API SimPay używane przez wszystkie metody płatności."
+
+msgid "Configuring the SimPay connection to the store"
+msgstr "Konfiguracja połączenia SimPay ze sklepem"
+
+msgid "Customer account → API → Details → Password / Bearer Token"
+msgstr "Panel klienta → API → Szczegóły → Hasło / Token Bearer"
+
+msgid "Description of payment method"
+msgstr "Opis metody płatności"
+
+msgid ""
+"If your shop is using Cloudflare, we do not recommend enabling this option."
+msgstr "Jeśli Twój sklep korzysta z Cloudflare, nie zalecamy włączania tej opcji."
+
+msgid "IPN signature key"
+msgstr "Klucz podpisu IPN"
+
+msgid "Note: This gateway is only visible for PLN currency."
+msgstr "Uwaga: Ta metoda płatności jest dostępna tylko dla waluty PLN."
+
+msgid "Online payment by BLIK"
+msgstr "Płatność online BLIK"
+
+msgid "Online payment by BLIK Pay Later"
+msgstr "Płatność online BLIK Płacę Później"
+
+msgid "Online payment by PayPo"
+msgstr "Płatność online PayPo"
+
+msgid "Online payment by SimPay"
+msgstr "Płatność online przez SimPay"
+
+msgid "Online payments → Services → Details → Service ID"
+msgstr "Płatności online → Usługi → Szczegóły → ID usługi"
+
+msgid "Online payments → Services → Details → Settings → IPN signature key"
+msgstr "Płatności online → Usługi → Szczegóły → Ustawienia → Klucz podpisu IPN"
+
+msgid "Order #%d"
+msgstr "Zamówienie nr %d"
+
+msgid "Pay with SimPay payment gateway."
+msgstr "Zapłać za pomocą bramki płatności SimPay."
+
+msgid "Service ID"
+msgstr "ID usługi"
+
+#, php-format
+msgid "Set this URL in SimPay panel as webhook/notification URL: %s"
+msgstr "Ustaw ten adres URL w panelu SimPay jako adres webhooka/powiadomień: %s"
+
+msgid "SimPay - BLIK"
+msgstr "SimPay – BLIK"
+
+msgid "SimPay - BLIK Pay Later"
+msgstr "SimPay – BLIK Płacę Później"
+
+msgid "SimPay - payment gateway"
+msgstr "SimPay – bramka płatności"
+
+msgid "SimPay - PayPo"
+msgstr "SimPay – PayPo"
+
+msgid "SimPay Online Payments for WooCommerce"
+msgstr "SimPay – płatności online dla WooCommerce"
+
+msgid "SimPay payment gateway for WooCommerce."
+msgstr "Bramka płatności SimPay dla WooCommerce."
+
+msgid "SimPay requires WooCommerce to be installed and active."
+msgstr "SimPay wymaga zainstalowanego i aktywnego WooCommerce."
+
+msgid "SimPay settings"
+msgstr "Ustawienia SimPay"
+
+msgid ""
+"This description will be available to the buyer when selecting payment "
+"methods"
+msgstr "Ten opis będzie widoczny dla kupującego podczas wyboru metody płatności."
+
+msgid ""
+"This title will be available to the buyer when selecting payment methods"
+msgstr "Ten tytuł będzie widoczny dla kupującego podczas wyboru metody płatności."
+
+msgid "Title of payment method"
+msgstr "Tytuł metody płatności"
+
+msgid "Turn on / Turn off"
+msgstr "Włącz / Wyłącz"
+
+msgid "Turn on payment method"
+msgstr "Włącz metodę płatności"
+
+msgid "Verify incoming IP address in IPN notifications"
+msgstr "Weryfikuj adres IP w przychodzących powiadomieniach IPN"
+
+msgid "Webhooks"
+msgstr "Webhooki"
+
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do dostępu do tej strony."
+
