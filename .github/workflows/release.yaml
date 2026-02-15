@@ -29,7 +29,7 @@ jobs:
           set -e
           ZIP="simpay-woocommerce-payment.zip"
           mkdir -p simpay-woocommerce-payment
-          cp -r assets languages src vendor composer.json composer.lock README.md simpay-woocommerce-payment.php
+          cp -r assets languages src vendor composer.json README.md simpay-woocommerce-payment.php simpay-woocommerce-payment
           zip -r "${ZIP}" simpay-woocommerce-payment
           sha256sum "${ZIP}" | tee "${ZIP}.sha256"
 
