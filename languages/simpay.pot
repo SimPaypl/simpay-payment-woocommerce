@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimPay Online Payments for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 19:55+0000\n"
+"POT-Creation-Date: 2026-03-31 18:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,6 +15,15 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.8.1; wp-6.9.1; php-8.3.29\n"
 "X-Domain: simpay"
+
+#. 1: current version, 2: latest version, 3: download URL
+#: ../../../../modules-dev/simpay-wordpress/src/Update/PluginUpdateChecker.php:51
+#, php-format
+msgid ""
+"A new version of the SimPay for WooCommerce plugin is available. Current: "
+"<strong>%1$s</strong>, latest: <strong>%2$s</strong>. <a href=\"%3$s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Download ZIP package</a>."
+msgstr ""
 
 #. Description of the plugin
 msgid ""
@@ -70,15 +79,15 @@ msgstr ""
 msgid "Note: This gateway is only visible for PLN currency."
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:21
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:20
 msgid "Online payment by BLIK"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:29
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:28
 msgid "Online payment by BLIK Pay Later"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:37
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:36
 msgid "Online payment by PayPo"
 msgstr ""
 
@@ -94,7 +103,7 @@ msgstr ""
 msgid "Online payments → Services → Details → Settings → IPN signature key"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/PaymentsService.php:46
+#: ../../../../modules-dev/simpay-wordpress/src/Service/PaymentsService.php:45
 msgid "Order #%d"
 msgstr ""
 
@@ -115,11 +124,11 @@ msgstr ""
 msgid "Set this URL in SimPay panel as webhook/notification URL: %s"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:20
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:19
 msgid "SimPay - BLIK"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:28
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:27
 msgid "SimPay - BLIK Pay Later"
 msgstr ""
 
@@ -127,8 +136,12 @@ msgstr ""
 msgid "SimPay - payment gateway"
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:36
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:35
 msgid "SimPay - PayPo"
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:102
+msgid "SimPay error: Order not found."
 msgstr ""
 
 #. Name of the plugin
@@ -139,7 +152,40 @@ msgstr ""
 msgid "SimPay payment gateway for WooCommerce."
 msgstr ""
 
-#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:77
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:75
+msgid "SimPay refund error: Missing refund ID in API response."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:27
+msgid "SimPay refund error: Missing transaction ID."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:40
+msgid "SimPay refund error: Nothing left to refund."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:127
+msgid "SimPay refund error: Order not found."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:65
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:209
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:219
+msgid ""
+"SimPay refund error: Previous refund request is still waiting for "
+"confirmation. Please wait a moment and try again."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:52
+msgid ""
+"SimPay refund error: Refund amount exceeds the remaining refundable amount."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:48
+msgid "SimPay refund error: Refund amount must be greater than zero."
+msgstr ""
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:90
 msgid "SimPay requires WooCommerce to be installed and active."
 msgstr ""
 

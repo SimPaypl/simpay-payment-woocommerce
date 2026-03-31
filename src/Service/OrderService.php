@@ -4,6 +4,13 @@ namespace SimPay\WooCommerce\Service;
 
 class OrderService
 {
+    private RefundsService $refunds;
+
+    public function __construct(RefundsService $refunds)
+    {
+        $this->refunds = $refunds;
+    }
+
     /**
      * Handle "transaction:status_changed" event.
      * Business logic for marking the order as paid belongs here.
@@ -112,17 +119,32 @@ class OrderService
 
         $order = $orders[0];
 
-        // Idempotency: do not create duplicates for the same SimPay refund id
-        foreach ($order->get_refunds() as $existingRefund) {
-            if ((string) $existingRefund->get_meta('_simpay_refund_id') === $simpayRefundId) {
-                $order->add_order_note(sprintf(
-                    'SimPay: Zwrot środków już został przetworzony. Kwota: %s %s, ID zwrotu: %s',
+        $existingRefund = $this->refunds->findRefundByRemoteId($order, $simpayRefundId);
+
+        if ($existingRefund instanceof \WC_Order_Refund) {
+            $currentStatus = (string) $existingRefund->get_meta('_simpay_refund_status');
+            if ($currentStatus !== 'refund_completed') {
+                $this->refunds->syncRefundMeta(
+                    $existingRefund,
+                    $simpayRefundId,
                     $refundAmount,
-                    $data['amount']['currency'],
-                    $simpayRefundId
+                    $refundCurrency ?: $order->get_currency(),
+                    'refund_completed',
+                    (string) $existingRefund->get_meta('_simpay_refund_origin') ?: 'woocommerce'
+                );
+
+                $order->add_order_note(sprintf(
+                    'SimPay: Refund confirmed. Amount: %s %s, SimPay refund ID: %s, Woo refund ID: %s',
+                    $refundAmount,
+                    $refundCurrency ?: $order->get_currency(),
+                    $simpayRefundId,
+                    $existingRefund->get_id()
                 ));
-                return;
+                $order->save();
             }
+
+            $this->refunds->removePendingRefund($order, $simpayRefundId);
+            return;
         }
 
         $refund = wc_create_refund([
@@ -143,8 +165,15 @@ class OrderService
             return;
         }
 
-        $refund->update_meta_data('_simpay_refund_id', $simpayRefundId);
-        $refund->save();
+        $this->refunds->syncRefundMeta(
+            $refund,
+            $simpayRefundId,
+            $refundAmount,
+            $refundCurrency ?: $order->get_currency(),
+            'refund_completed',
+            'simpay'
+        );
+        $this->refunds->removePendingRefund($order, $simpayRefundId);
 
         $order->add_order_note(sprintf(
             'SimPay: Refund completed. Amount: %s %s, SimPay refund ID: %s, Woo refund ID: %s',

@@ -3,7 +3,6 @@
 namespace SimPay\WooCommerce\Service;
 
 use SimPay\WooCommerce\Api\SimPayApiClient;
-
 use SimPay\WooCommerce\Config\Gateways;
 
 class PaymentsService
@@ -12,10 +11,10 @@ class PaymentsService
     public function __construct(SimPayApiClient $api) {
         $this->api = $api;
     }
-    public function createTransaction(\WC_Order $order, string $gatewayId, string $returnUrl): array
+    public function createTransaction(\WC_Order $order, \WC_Customer $customer, string $gatewayId, string $returnUrl): array
     {
         $gatewayIdChannel = Gateways::get($gatewayId, 'api');
-        $payload = $this->buildPayload($order, $gatewayIdChannel, $returnUrl);
+        $payload = $this->buildPayload($order, $customer, $gatewayIdChannel, $returnUrl);
         $response = $this->api->createTransaction($payload);
         $redirect = $response['data']['redirectUrl'] ?? null;
         $txId     = $response['data']['transactionId'] ?? null;
@@ -38,7 +37,7 @@ class PaymentsService
         ];
     }
 
-    private function buildPayload(\WC_Order $order, $gatewayIdChannel, string $returnUrl): array
+    private function buildPayload(\WC_Order $order, \WC_Customer $customer, $gatewayIdChannel, string $returnUrl): array
     {
         $payload = [
             'amount'      => (float) $order->get_total(),
@@ -77,11 +76,47 @@ class PaymentsService
             ],
         ];
 
-        // Add direct channel if configured for this gateway
+        $context = $this->buildContext($order, $customer);
+
+        if ($context !== null) {
+            $payload['context'] = $context;
+        }
+
         if (!empty($gatewayIdChannel)) {
             $payload['directChannel'] = $gatewayIdChannel;
         }
 
         return $payload;
+    }
+
+    private function buildContext(\WC_Order $order, \WC_Customer $customer): ?array
+    {
+        if (!$customer->get_id()) {
+            return null;
+        }
+
+        $salesTotalCount = (int) $customer->get_order_count();
+        $salesTotalAmount = (float) $customer->get_total_spent();
+        $salesAvgAmount = $salesTotalCount > 0 ? $salesTotalAmount / $salesTotalCount : 0.0;
+        $lastOrder = $customer->get_last_order();
+        $lastLoginAt = $lastOrder ? $this->formatWcDate($lastOrder->get_date_created()) : null;
+
+        return [
+            'accountCreatedAt' => $this->formatWcDate($customer->get_date_created()),
+            'salesTotalCount' => $salesTotalCount,
+            'salesTotalAmount' => $salesTotalAmount,
+            'salesAvgAmount' => (float) $salesAvgAmount,
+            'salesMaxAmount' => (float) $order->get_total(),
+            'refundsTotalAmount' => (float) $order->get_total_refunded(),
+            'previousChargeback' => false,
+            'accountSetCurrency' => substr((string) $order->get_currency(), 0, 3),
+            'lastLoginAt' => $lastLoginAt,
+            'hasPreviousPurchases' => $salesTotalCount > 0,
+        ];
+    }
+
+    private function formatWcDate($date): ?string
+    {
+        return $date ? gmdate('c', $date->getTimestamp()) : null;
     }
 }

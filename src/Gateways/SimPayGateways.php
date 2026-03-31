@@ -34,7 +34,7 @@ abstract class SimPayGateways extends \WC_Payment_Gateway
         $this->method_title = Gateways::get($this->id, 'name');
         $this->method_description = __('SimPay payment gateway for WooCommerce.', 'simpay');
         $this->has_fields = false;
-        $this->supports = ['products'];
+        $this->supports = ['products', 'refunds'];
     }
 
     public function init_form_fields()
@@ -97,9 +97,17 @@ abstract class SimPayGateways extends \WC_Payment_Gateway
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
+
+        if (!$order instanceof \WC_Order) {
+            wc_add_notice(__('SimPay error: Order not found.', 'simpay'), 'error');
+
+            return ['result' => 'failure'];
+        }
+
+        $customer = new \WC_Customer((int) $order->get_customer_id());
         try {
             $payments = SimPayFactory::payments();
-            $result = $payments->createTransaction($order, $this->id, $this->get_return_url($order));
+            $result = $payments->createTransaction($order, $customer, $this->id, $this->get_return_url($order));
 
             return [
                 'result'   => 'success',
@@ -108,6 +116,44 @@ abstract class SimPayGateways extends \WC_Payment_Gateway
         } catch (\Throwable $e) {
             wc_add_notice('SimPay error: ' . $e->getMessage(), 'error');
             return ['result' => 'failure'];
+        }
+    }
+
+    public function process_refund($order_id, $amount = null, $reason = '')
+    {
+        $order = wc_get_order($order_id);
+
+        if (!$order instanceof \WC_Order) {
+            return new \WP_Error('simpay_refund_error', __('SimPay refund error: Order not found.', 'simpay'));
+        }
+
+        try {
+            $refund = SimPayFactory::refunds()->requestRefund(
+                $order,
+                $amount !== null ? (float) $amount : null,
+                (string) $reason
+            );
+
+            $order->add_order_note(sprintf(
+                'SimPay: Refund requested. Amount: %s %s, SimPay refund ID: %s',
+                $refund['amount'],
+                $refund['currency'],
+                $refund['refund_id']
+            ));
+            $order->save();
+
+            return true;
+        } catch (\Throwable $e) {
+            SimPayFactory::refunds()->rollbackUnlinkedWooRefund(
+                $order,
+                $amount !== null ? (float) $amount : null,
+                (string) $reason
+            );
+
+            $order->add_order_note('SimPay refund error: ' . $e->getMessage());
+            $order->save();
+
+            return new \WP_Error('simpay_refund_error', $e->getMessage());
         }
     }
 

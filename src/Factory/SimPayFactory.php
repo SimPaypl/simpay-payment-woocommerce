@@ -7,6 +7,7 @@ use SimPay\WooCommerce\Api\SimPayApiClient;
 use SimPay\WooCommerce\Api\WordPressHttpClient;
 use SimPay\WooCommerce\Service\PaymentsService;
 use SimPay\WooCommerce\Service\OrderService;
+use SimPay\WooCommerce\Service\RefundsService;
 use SimPay\WooCommerce\Settings\SimPayGlobalSettings;
 
 final class SimPayFactory
@@ -16,6 +17,7 @@ final class SimPayFactory
 
     private static ?PaymentsService $payments = null;
     private static ?OrderService $orders = null;
+    private static ?RefundsService $refunds = null;
     /**
      * Shared WP HTTP client (one per request).
      */
@@ -57,6 +59,11 @@ final class SimPayFactory
 
     public static function orders(): OrderService
     {
-        return self::$orders ??= new OrderService();
+        return self::$orders ??= new OrderService(self::refunds());
+    }
+
+    public static function refunds(): RefundsService
+    {
+        return self::$refunds ??= new RefundsService(self::api());
     }
 }

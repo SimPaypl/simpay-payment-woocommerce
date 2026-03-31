@@ -12,8 +12,7 @@ final class Gateways
                 'name' => __('SimPay - payment gateway', 'simpay'),
                 'front_name' => __('Online payment by SimPay', 'simpay'),
                 'default_description' => __('Choose payment method.', 'simpay'),
-                'default_enabled' => 'yes',
-                'api' => 'PBL_ID',
+                'default_enabled' => 'yes'
             ],
             'simpay_blik' => [
                 'class' => \SimPay\WooCommerce\Gateways\Blik::class,

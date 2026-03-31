@@ -3,9 +3,11 @@
 namespace SimPay\WooCommerce;
 
 use SimPay\WooCommerce\Config\Gateways;
+use SimPay\WooCommerce\Factory\SimPayFactory;
 use SimPay\WooCommerce\IPN\IPNController;
 use SimPay\WooCommerce\Settings\SimPayGlobalSettings;
 use SimPay\WooCommerce\Blocks\SimPayBlocksSupport;
+use SimPay\WooCommerce\Update\PluginUpdateChecker;
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 
@@ -14,6 +16,7 @@ class Plugin
     public static function run(): void
     {
         add_action('init', [self::class, 'load_textdomain']);
+        add_action('admin_init', [self::class, 'register_update_checker']);
 
         // WooCommerce missing -> do nothing
         if (!class_exists('WooCommerce')) {
@@ -25,9 +28,14 @@ class Plugin
         add_filter('woocommerce_payment_gateways', [self::class, 'register_gateways']);
 
         // Webhook/IPN endpoint
-        add_action('woocommerce_api_simpay_ipn', function () {
+        add_action('woocommerce_api_simpay', function () {
             (new IPNController())->handle();
         });
+
+        // Bind remote refund created in SimPay to the local WooCommerce refund
+        add_action('woocommerce_refund_created', function (int $refundId) {
+            SimPayFactory::refunds()->bindPendingRefundToWooRefund($refundId);
+        }, 10, 1);
 
         // Blocks checkout integration
         add_action('woocommerce_blocks_loaded', [self::class, 'register_blocks']);
@@ -36,6 +44,11 @@ class Plugin
         if (is_admin()) {
             new SimPayGlobalSettings();
         }
+    }
+
+    public static function register_update_checker(): void
+    {
+        (new PluginUpdateChecker(WC_SIMPAY_VERSION))->register();
     }
 
     public static function register_gateways(array $methods): array

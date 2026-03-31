@@ -31,6 +31,21 @@ class SimPayApiClient
         );
     }
 
+    public function createRefund(string $transactionId, ?float $amount = null): array
+    {
+        $payload = [];
+
+        if ($amount !== null) {
+            $payload['amount'] = $amount;
+        }
+
+        return $this->http->post(
+            sprintf('https://api.simpay.pl/payment/%s/transactions/%s/refunds', $this->serviceId, $transactionId),
+            $payload,
+            $this->authHeaders()
+        );
+    }
+
     /**
      * GET /ip
      * @return string[]
