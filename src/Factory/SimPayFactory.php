@@ -1,52 +1,59 @@
 <?php
 
-
 namespace SimPay\WooCommerce\Factory;
 
-use SimPay\WooCommerce\Api\SimPayApiClient;
+use SimPay\SDK\SimPay;
+use SimPay\SDK\SimPayClient;
+use SimPay\WooCommerce\Api\WordPressCache;
 use SimPay\WooCommerce\Api\WordPressHttpClient;
 use SimPay\WooCommerce\Service\PaymentsService;
 use SimPay\WooCommerce\Service\OrderService;
 use SimPay\WooCommerce\Service\RefundsService;
+use SimPay\WooCommerce\Database\BlikAliasRepository;
 use SimPay\WooCommerce\Settings\SimPayGlobalSettings;
 
 final class SimPayFactory
 {
-    private static ?WordPressHttpClient $http = null;
-    private static ?SimPayApiClient $api = null;
+    private static ?SimPay $simpay = null;
 
     private static ?PaymentsService $payments = null;
     private static ?OrderService $orders = null;
     private static ?RefundsService $refunds = null;
+    private static ?BlikAliasRepository $blikAliases = null;
+
     /**
-     * Shared WP HTTP client (one per request).
+     * Shared SDK entry point (one per request).
      */
-    public static function http(): WordPressHttpClient
+    public static function sdk(): SimPay
     {
-        if (self::$http) {
-            return self::$http;
+        if (self::$simpay !== null) {
+            return self::$simpay;
         }
 
-        self::$http = new WordPressHttpClient();
+        $serviceId    = (string) SimPayGlobalSettings::get('service_id', '');
+        $bearer       = (string) SimPayGlobalSettings::get('api_password', '');
+        $signatureKey = (string) SimPayGlobalSettings::get('service_ipn_signature_key', '');
+        $version      = defined('WC_SIMPAY_VERSION') ? WC_SIMPAY_VERSION : '1.0.0';
 
-        return self::$http;
+        self::$simpay = new SimPay(
+            bearerToken: $bearer,
+            serviceId: $serviceId,
+            signatureKey: $signatureKey,
+            platform: 'woocommerce',
+            platformVersion: $version,
+            httpClient: new WordPressHttpClient(),
+            cache: new WordPressCache()
+        );
+
+        return self::$simpay;
     }
 
     /**
-     * Shared SimPay API client (one per request).
+     * SDK API client for direct API calls.
      */
-    public static function api(): SimPayApiClient
+    public static function client(): SimPayClient
     {
-        if (self::$api) {
-            return self::$api;
-        }
-
-        $serviceId = (string) SimPayGlobalSettings::get('service_id', '');
-        $bearer = (string) SimPayGlobalSettings::get('api_password', '');
-
-        self::$api = new SimPayApiClient(self::http(), $serviceId, $bearer);
-
-        return self::$api;
+        return self::sdk()->client();
     }
 
     /**
@@ -54,7 +61,7 @@ final class SimPayFactory
      */
     public static function payments(): PaymentsService
     {
-        return self::$payments ??= new PaymentsService(self::api());
+        return self::$payments ??= new PaymentsService(self::sdk());
     }
 
     public static function orders(): OrderService
@@ -64,6 +71,11 @@ final class SimPayFactory
 
     public static function refunds(): RefundsService
     {
-        return self::$refunds ??= new RefundsService(self::api());
+        return self::$refunds ??= new RefundsService(self::client());
+    }
+
+    public static function blikAliases(): BlikAliasRepository
+    {
+        return self::$blikAliases ??= new BlikAliasRepository();
     }
 }

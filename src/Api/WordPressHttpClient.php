@@ -2,57 +2,37 @@
 
 namespace SimPay\WooCommerce\Api;
 
-final class WordPressHttpClient
-{
-    public function request(
-        string $method,
-        string $url,
-        array $body = [],
-        array $headers = [],
-        int $timeout = 15
-    ): array {
+use SimPay\SDK\Http\HttpClientInterface;
+use SimPay\SDK\Http\HttpResponse;
+use SimPay\SDK\Exception\HttpException;
 
+final class WordPressHttpClient implements HttpClientInterface
+{
+    public function request(string $method, string $url, array $headers = [], ?array $body = null, int $timeout = 30): HttpResponse
+    {
         $args = [
             'method'  => strtoupper($method),
             'headers' => array_merge([
-                'Accept' => 'application/json; charset=utf-8',
-                'Content-Type' => 'application/json; charset=utf-8',
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/json',
             ], $headers),
             'timeout' => $timeout,
         ];
 
-        if (!empty($body)) {
+        if ($body !== null) {
             $args['body'] = wp_json_encode($body);
+            error_log('SimPay HTTP ' . strtoupper($method) . ' ' . $url . ' PAYLOAD: ' . $args['body']);
         }
 
         $res = wp_remote_request($url, $args);
+
         if (is_wp_error($res)) {
-            throw new \RuntimeException($res->get_error_message());
-        }
-        $code = (int) wp_remote_retrieve_response_code($res);
-        $raw  = (string) wp_remote_retrieve_body($res);
-
-        if ($code < 200 || $code >= 300) {
-            throw new \RuntimeException("HTTP {$code}: {$raw}");
+            throw new HttpException($res->get_error_message());
         }
 
-        $json = json_decode($raw, true);
+        $statusCode = (int) wp_remote_retrieve_response_code($res);
+        $rawBody    = (string) wp_remote_retrieve_body($res);
 
-        return is_array($json) ? $json : [];
-    }
-
-    public function get(string $url, array $headers = []): array
-    {
-        return $this->request('GET', $url, [], $headers);
-    }
-
-    public function post(string $url, array $body = [], array $headers = []): array
-    {
-        return $this->request('POST', $url, $body, $headers);
-    }
-
-    public function delete(string $url, array $headers = []): array
-    {
-        return $this->request('DELETE', $url, [], $headers);
+        return new HttpResponse($statusCode, $rawBody);
     }
 }

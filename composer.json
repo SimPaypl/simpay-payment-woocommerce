@@ -14,8 +14,15 @@
     }
   },
   "require": {
-    "php": ">=8.0"
+    "php": ">=8.1",
+    "simpay/ecommerce": "*"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/SimPaypl/simpay-ecommerce"
+    }
+  ],
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist"

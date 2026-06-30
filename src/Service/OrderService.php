@@ -2,6 +2,10 @@
 
 namespace SimPay\WooCommerce\Service;
 
+use SimPay\SDK\AmountVerifier;
+use SimPay\SDK\IpnPayload;
+use SimPay\SDK\PaymentStatus;
+
 class OrderService
 {
     private RefundsService $refunds;
@@ -13,16 +17,15 @@ class OrderService
 
     /**
      * Handle "transaction:status_changed" event.
-     * Business logic for marking the order as paid belongs here.
      */
-    public function handleTransactionStatusChanged(array $data): void
+    public function handleTransactionStatusChanged(IpnPayload $ipn): void
     {
-        if (($data['status'] ?? '') !== 'transaction_paid') {
-            error_log('Transaction status changed: ' . print_r($data['status'], true));
+        if (!$ipn->isPaid()) {
+            error_log('Transaction status changed: ' . $ipn->getStatus());
             return;
         }
 
-        $orderId = isset($data['control']) ? (int) $data['control'] : 0;
+        $orderId = (int) $ipn->getControl();
         if (!$orderId) {
             error_log('Order id is null');
             return;
@@ -40,23 +43,24 @@ class OrderService
             return;
         }
 
-        $transactionId = (string) ($data['id'] ?? '');
+        $transactionId = $ipn->getTransactionId();
         if ($transactionId === '') {
             error_log('Order #' . $orderId . ' cannot be processed');
             throw new \RuntimeException('Missing transaction id');
         }
 
-        $paidAmount   = (float) ($data['amount']['final_value'] ?? 0);
-        $orderTotal   = (float) $order->get_total();
+        $orderTotal = (float) $order->get_total();
+        $paidAmount = (float) ($ipn->data['amount']['final_value'] ?? $ipn->getAmount());
+        $paidCurrency = (string) ($ipn->data['amount']['final_currency'] ?? $ipn->getCurrency());
 
         // Amount must not be lower than expected
-        if ($paidAmount < $orderTotal) {
+        if (!AmountVerifier::isAmountSufficient($orderTotal, $paidAmount)) {
             $order->add_order_note(sprintf(
                 'SimPay: Invalid payment amount. Expected %s %s, got %s %s.',
                 $orderTotal,
                 $order->get_currency(),
                 $paidAmount,
-                $data['amount']['final_currency'] ?? ''
+                $paidCurrency
             ));
             $order->save();
 
@@ -71,8 +75,8 @@ class OrderService
         $order->add_order_note(sprintf(
             'SimPay: Payment completed. Amount: %s %s, Channel: %s, Transaction ID: %s',
             $paidAmount,
-            $data['amount']['final_currency'],
-            (string) ($data['payment']['channel'] ?? 'unknown'),
+            $paidCurrency,
+            (string) ($ipn->data['payment']['channel'] ?? 'unknown'),
             $transactionId
         ));
 
@@ -81,26 +85,25 @@ class OrderService
 
     /**
      * Handle "transaction_refund:status_changed" event.
-     * Business logic for creating WooCommerce refunds belongs here.
      */
-    public function handleRefundStatusChanged(array $data): void
+    public function handleRefundStatusChanged(IpnPayload $ipn): void
     {
-        if (($data['status'] ?? '') !== 'refund_completed') {
+        if ($ipn->getStatus() !== PaymentStatus::REFUND_COMPLETED) {
             return;
         }
 
-        $transactionId = (string) ($data['transaction']['id'] ?? '');
+        $transactionId = $ipn->getTransactionId();
         if ($transactionId === '') {
             return;
         }
 
-        $simpayRefundId = (string) ($data['id'] ?? '');
+        $simpayRefundId = (string) ($ipn->data['id'] ?? '');
         if ($simpayRefundId === '') {
             return;
         }
 
-        $refundAmount   = (float) ($data['amount']['value'] ?? 0);
-        $refundCurrency = (string) ($data['amount']['currency'] ?? '');
+        $refundAmount   = $ipn->getAmount();
+        $refundCurrency = $ipn->getCurrency();
 
         if ($refundAmount <= 0) {
             return;
@@ -123,13 +126,13 @@ class OrderService
 
         if ($existingRefund instanceof \WC_Order_Refund) {
             $currentStatus = (string) $existingRefund->get_meta('_simpay_refund_status');
-            if ($currentStatus !== 'refund_completed') {
+            if ($currentStatus !== PaymentStatus::REFUND_COMPLETED) {
                 $this->refunds->syncRefundMeta(
                     $existingRefund,
                     $simpayRefundId,
                     $refundAmount,
                     $refundCurrency ?: $order->get_currency(),
-                    'refund_completed',
+                    PaymentStatus::REFUND_COMPLETED,
                     (string) $existingRefund->get_meta('_simpay_refund_origin') ?: 'woocommerce'
                 );
 
@@ -170,7 +173,7 @@ class OrderService
             $simpayRefundId,
             $refundAmount,
             $refundCurrency ?: $order->get_currency(),
-            'refund_completed',
+            PaymentStatus::REFUND_COMPLETED,
             'simpay'
         );
         $this->refunds->removePendingRefund($order, $simpayRefundId);
@@ -188,10 +191,9 @@ class OrderService
 
     /**
      * Handle "ipn:test" event.
-     * Keep it as no-op or log (prefer WC_Logger).
      */
-    public function handleTestNotification(array $data): void
+    public function handleTestNotification(IpnPayload $ipn): void
     {
-        error_log('SimPay IPN v2 Test notification received for service: ' . $data['service_id']);
+        error_log('SimPay IPN v2 Test notification received for service: ' . ($ipn->data['service_id'] ?? 'unknown'));
     }
 }

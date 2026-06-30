@@ -2,7 +2,8 @@
 
 namespace SimPay\WooCommerce\Service;
 
-use SimPay\WooCommerce\Api\SimPayApiClient;
+use SimPay\SDK\SimPayClient;
+use SimPay\SDK\Exception\ApiException;
 
 class RefundsService
 {
@@ -13,9 +14,9 @@ class RefundsService
     private const REFUND_CURRENCY_META = '_simpay_refund_currency';
     private const REFUND_ORIGIN_META = '_simpay_refund_origin';
 
-    private SimPayApiClient $api;
+    private SimPayClient $api;
 
-    public function __construct(SimPayApiClient $api)
+    public function __construct(SimPayClient $api)
     {
         $this->api = $api;
     }
@@ -59,8 +60,8 @@ class RefundsService
                 $transactionId,
                 $amount !== null ? $requestedAmount : null
             );
-        } catch (\RuntimeException $e) {
-            if ($this->isPendingRefundConflict($e)) {
+        } catch (ApiException $e) {
+            if ($e->getHttpStatusCode() === 409) {
                 throw new \RuntimeException(
                     __('SimPay refund error: Previous refund request is still waiting for confirmation. Please wait a moment and try again.', 'simpay')
                 );
@@ -221,13 +222,6 @@ class RefundsService
         }
     }
 
-    private function isPendingRefundConflict(\RuntimeException $e): bool
-    {
-        $message = $e->getMessage();
-
-        return str_contains($message, 'HTTP 409')
-            && str_contains($message, 'A refund request for this transaction already exists');
-    }
 
     private function attachPendingRefundToWooRefund(\WC_Order $order, \WC_Order_Refund $refund, float $refundAmount): void
     {

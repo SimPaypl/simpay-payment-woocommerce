@@ -2,11 +2,12 @@
 
 namespace SimPay\WooCommerce\IPN;
 
+use SimPay\SDK\IpnPayload;
 use SimPay\WooCommerce\Service\OrderService;
+use SimPay\WooCommerce\Blik\BlikPaymentHandler;
 
 class IPNEventDispatcher
 {
-    /** @var OrderService */
     private OrderService $orderService;
 
     public function __construct(OrderService $orderService)
@@ -15,35 +16,37 @@ class IPNEventDispatcher
     }
 
     /**
-     * Route IPN events to services.
+     * Route IPN events to services using SDK's IpnPayload DTO.
      *
      * @throws \RuntimeException for unknown event types
      */
-    public function dispatch(array $payload): void
+    public function dispatch(IpnPayload $ipn): void
     {
-        $type = (string) ($payload['type'] ?? '');
-        $data = is_array($payload['data'] ?? null) ? $payload['data'] : [];
-
-        if ($type === '') {
-            throw new \RuntimeException('Missing event type');
+        if ($ipn->isTransactionEvent()) {
+            $this->orderService->handleTransactionStatusChanged($ipn);
+            return;
         }
-        error_log('Test status changed event: ' . print_r($payload['type'], true));
-        switch ($type) {
-            case 'transaction:status_changed':
-                $this->orderService->handleTransactionStatusChanged($data);
-                return;
 
-            case 'transaction_refund:status_changed':
-                $this->orderService->handleRefundStatusChanged($data);
-                return;
-
-            case 'ipn:test':
-                $this->orderService->handleTestNotification($data);
-                return;
-
-
-            default:
-                throw new \RuntimeException('Unknown event type: ' . $type);
+        if ($ipn->isRefundEvent()) {
+            $this->orderService->handleRefundStatusChanged($ipn);
+            return;
         }
+
+        if ($ipn->isBlikCodeStatusEvent()) {
+            BlikPaymentHandler::handleBlikCodeStatus($ipn);
+            return;
+        }
+
+        if ($ipn->isBlikAliasEvent()) {
+            BlikPaymentHandler::handleBlikAliasStatus($ipn);
+            return;
+        }
+
+        if ($ipn->type === 'ipn:test') {
+            $this->orderService->handleTestNotification($ipn);
+            return;
+        }
+
+        throw new \RuntimeException('Unknown event type: ' . $ipn->type);
     }
 }

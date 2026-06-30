@@ -2,20 +2,24 @@
 
 namespace SimPay\WooCommerce\Service;
 
-use SimPay\WooCommerce\Api\SimPayApiClient;
+	use SimPay\SDK\SimPay;
+use SimPay\SDK\TransactionBuilder;
 use SimPay\WooCommerce\Config\Gateways;
 
 class PaymentsService
 {
-    private  SimPayApiClient $api;
-    public function __construct(SimPayApiClient $api) {
-        $this->api = $api;
-    }
-    public function createTransaction(\WC_Order $order, \WC_Customer $customer, string $gatewayId, string $returnUrl): array
+    private SimPay $simpay;
+
+    public function __construct(SimPay $simpay)
     {
-        $gatewayIdChannel = Gateways::get($gatewayId, 'api');
+        $this->simpay = $simpay;
+    }
+
+    public function createTransaction(\WC_Order $order, \WC_Customer $customer, string $gatewayId, string $returnUrl, ?string $directChannel = null): array
+    {
+        $gatewayIdChannel = $directChannel ?? Gateways::get($gatewayId, 'api');
         $payload = $this->buildPayload($order, $customer, $gatewayIdChannel, $returnUrl);
-        $response = $this->api->createTransaction($payload);
+        $response = $this->simpay->client()->createTransaction($payload);
         $redirect = $response['data']['redirectUrl'] ?? null;
         $txId     = $response['data']['transactionId'] ?? null;
 
@@ -37,82 +41,68 @@ class PaymentsService
         ];
     }
 
-    private function buildPayload(\WC_Order $order, \WC_Customer $customer, $gatewayIdChannel, string $returnUrl): array
+    private function buildPayload(\WC_Order $order, \WC_Customer $customer, ?string $gatewayIdChannel, string $returnUrl): array
     {
-        $payload = [
-            'amount'      => (float) $order->get_total(),
-            'currency'    => $order->get_currency(),
-            'description' => sprintf(__('Order #%d', 'simpay'), $order->get_order_number()),
-            'control'     => (string) $order->get_id(),
-            'customer'    => [
-                'name'  => trim($order->get_billing_first_name() . ' ' . $order->get_billing_last_name()),
-                'email' => $order->get_billing_email(),
-                'ip'    => $order->get_customer_ip_address(),
-            ],
-            'antifraud' => [
-                'useragent' => $order->get_customer_user_agent(),
-            ],
-            'billing' => [
-                'name'       => $order->get_billing_first_name(),
-                'surname'    => $order->get_billing_last_name(),
-                'street'     => trim($order->get_billing_address_1() . ' ' . $order->get_billing_address_2()),
-                'city'       => $order->get_billing_city(),
-                'postalCode' => $order->get_billing_postcode(),
-                'country'    => $order->get_billing_country(),
-                'company'    => $order->get_billing_company(),
-            ],
-            'shipping' => [
-                'name'       => $order->get_shipping_first_name(),
-                'surname'    => $order->get_shipping_last_name(),
-                'street'     => trim($order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2()),
-                'city'       => $order->get_shipping_city(),
-                'postalCode' => $order->get_shipping_postcode(),
-                'country'    => $order->get_shipping_country(),
-                'company'    => $order->get_shipping_company(),
-            ],
-            'returns' => [
-                'success' => $returnUrl,
-                'failure' => $returnUrl,
-            ],
-        ];
-
-        $context = $this->buildContext($order, $customer);
-
-        if ($context !== null) {
-            $payload['context'] = $context;
-        }
+        $builder = TransactionBuilder::create()
+            ->setAmount((float) $order->get_total(), $order->get_currency())
+            ->setDescription(sprintf(__('Order #%d', 'simpay'), $order->get_order_number()))
+            ->setControl((string) $order->get_id())
+            ->setCustomer(
+                trim($order->get_billing_first_name() . ' ' . $order->get_billing_last_name()),
+                $order->get_billing_email(),
+                $order->get_customer_ip_address()
+            )
+            ->setAntifraud(null, $order->get_customer_user_agent())
+            ->setBilling(
+                $order->get_billing_first_name(),
+                $order->get_billing_last_name(),
+                trim($order->get_billing_address_1() . ' ' . $order->get_billing_address_2()),
+                null,
+                $order->get_billing_city(),
+                $order->get_billing_postcode(),
+                $order->get_billing_country(),
+                $order->get_billing_company()
+            )
+            ->setShipping(
+                $order->get_shipping_first_name(),
+                $order->get_shipping_last_name(),
+                trim($order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2()),
+                null,
+                $order->get_shipping_city(),
+                $order->get_shipping_postcode(),
+                $order->get_shipping_country(),
+                $order->get_shipping_company()
+            )
+            ->setReturnUrls($returnUrl, $returnUrl, $returnUrl);
 
         if (!empty($gatewayIdChannel)) {
-            $payload['directChannel'] = $gatewayIdChannel;
+            $builder->setDirectChannel($gatewayIdChannel);
         }
 
-        return $payload;
+        $this->applyContext($builder, $order, $customer);
+
+        return $builder->toArray();
     }
 
-    private function buildContext(\WC_Order $order, \WC_Customer $customer): ?array
+    private function applyContext(TransactionBuilder $builder, \WC_Order $order, \WC_Customer $customer): void
     {
         if (!$customer->get_id()) {
-            return null;
+            return;
         }
 
-        $salesTotalCount = (int) $customer->get_order_count();
+        $salesTotalCount  = (int) $customer->get_order_count();
         $salesTotalAmount = (float) $customer->get_total_spent();
-        $salesAvgAmount = $salesTotalCount > 0 ? $salesTotalAmount / $salesTotalCount : 0.0;
-        $lastOrder = $customer->get_last_order();
-        $lastLoginAt = $lastOrder ? $this->formatWcDate($lastOrder->get_date_created()) : null;
+        $salesAvgAmount   = $salesTotalCount > 0 ? $salesTotalAmount / $salesTotalCount : 0.0;
 
-        return [
-            'accountCreatedAt' => $this->formatWcDate($customer->get_date_created()),
-            'salesTotalCount' => $salesTotalCount,
-            'salesTotalAmount' => $salesTotalAmount,
-            'salesAvgAmount' => (float) $salesAvgAmount,
-            'salesMaxAmount' => (float) $order->get_total(),
-            'refundsTotalAmount' => (float) $order->get_total_refunded(),
-            'previousChargeback' => false,
-            'accountSetCurrency' => substr((string) $order->get_currency(), 0, 3),
-            'lastLoginAt' => $lastLoginAt,
-            'hasPreviousPurchases' => $salesTotalCount > 0,
-        ];
+        $builder->setContext(
+            accountCreatedAt: $this->formatWcDate($customer->get_date_created()),
+            salesTotalCount: $salesTotalCount,
+            salesTotalAmount: $salesTotalAmount,
+            salesAvgAmount: $salesAvgAmount,
+            salesMaxAmount: (float) $order->get_total(),
+            accountSetCurrency: substr((string) $order->get_currency(), 0, 3),
+            hasPreviousPurchases: $salesTotalCount > 0
+        );
     }
 
     private function formatWcDate($date): ?string

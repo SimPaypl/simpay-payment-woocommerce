@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimPay Online Payments for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 22:01+0000\n"
-"PO-Revision-Date: 2026-03-31 18:29+0000\n"
+"POT-Creation-Date: 2026-06-30 15:30+0000\n"
+"PO-Revision-Date: 2026-06-30 17:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: Polski\n"
 "Language: pl_PL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.3.29\n"
+"X-Loco-Version: 2.8.1; wp-7.0; php-8.3.30\n"
 "X-Domain: simpay"
 
 #. 1: current version, 2: latest version, 3: download URL
@@ -42,6 +42,31 @@ msgstr ""
 msgid "API password"
 msgstr "Hasło API"
 
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:51
+msgid "BLIK alias label"
+msgstr "Etykieta aliasu BLIK"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:246
+msgid "BLIK code"
+msgstr "Kod BLIK"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:37
+msgid "BLIK Level 0"
+msgstr "BLIK Level 0"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:33
+msgid "BLIK Level 0 & OneClick settings"
+msgstr "Ustawienia BLIK Level 0 i OneClick"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:44
+msgid "BLIK OneClick"
+msgstr "BLIK OneClick"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:307
+msgid "BLIK payment without code is only available for logged-in users."
+msgstr ""
+"Płatność BLIK bez kodu jest dostępna tylko dla zalogowanych użytkowników."
+
 #: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:14
 msgid "Choose payment method."
 msgstr "Wybierz metodę płatności."
@@ -52,6 +77,14 @@ msgid "Configure API credentials in <a href=\"%s\">SimPay Global Settings</a>."
 msgstr ""
 "Skonfiguruj dane API w <a href=\"%s\">Ustawieniach globalnych SimPay</a>."
 
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:34
+msgid ""
+"Configure BLIK Level 0 (code on your page) and OneClick (payment without "
+"code) features. Both require activation in SimPay panel."
+msgstr ""
+"Skonfiguruj funkcje BLIK Level 0 (kod na stronie) oraz OneClick (płatność "
+"bez kodu). Obie wymagają aktywacji w panelu SimPay."
+
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:52
 msgid "Configure SimPay API credentials used by all payment methods."
 msgstr "Skonfiguruj dane API SimPay używane przez wszystkie metody płatności."
@@ -60,18 +93,55 @@ msgstr "Skonfiguruj dane API SimPay używane przez wszystkie metody płatności.
 msgid "Configuring the SimPay connection to the store"
 msgstr "Konfiguracja połączenia SimPay ze sklepem"
 
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikPaymentHandler.php:263
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:181
+msgid "Confirm the payment in your banking app"
+msgstr "Potwierdź płatność w aplikacji bankowej"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:149
+msgid "Confirm the payment in your banking app."
+msgstr "Potwierdź płatność w aplikacji bankowej."
+
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:54
 msgid "Customer account → API → Details → Password / Bearer Token"
 msgstr "Panel klienta → API → Szczegóły → Hasło / Token Bearer"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:40
+msgid ""
+"Customer enters the 6-digit BLIK code directly on your checkout page without "
+"redirect."
+msgstr ""
+"Klient wpisuje 6-cyfrowy kod BLIK bezpośrednio na stronie zamówienia, bez "
+"przekierowania."
 
 #: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:63
 msgid "Description of payment method"
 msgstr "Opis metody płatności"
 
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:38
+msgid "Enable BLIK Level 0 (code input on checkout page)"
+msgstr "Włącz BLIK Level 0 (wpisywanie kodu na stronie zamówienia)"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:45
+msgid "Enable BLIK OneClick (payment without code)"
+msgstr "Włącz BLIK OneClick (płatność bez kodu)"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:192
+msgid "Enter BLIK code"
+msgstr "Wpisz kod BLIK"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:193
+msgid "Enter the 6-digit code from your banking app"
+msgstr "Wpisz 6-cyfrowy kod z aplikacji bankowej"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:318
+msgid "Enter the BLIK code"
+msgstr "Podaj kod BLIK"
+
 #. URI of the plugin
 #. Author URI of the plugin
 msgid "https://simpay.pl"
-msgstr ""
+msgstr "https://simpay.pl"
 
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:56
 msgid ""
@@ -79,9 +149,22 @@ msgid ""
 msgstr ""
 "Jeśli Twój sklep korzysta z Cloudflare, nie zalecamy włączania tej opcji."
 
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:89
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:323
+msgid "Incorrect BLIK code was entered. Try again."
+msgstr "Podano nieprawidłowy kod BLIK. Spróbuj ponownie."
+
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:55
 msgid "IPN signature key"
 msgstr "Klucz podpisu IPN"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:53
+msgid ""
+"Label shown in customer's banking app when saving your shop as trusted. Must "
+"comply with BLIK certification requirements."
+msgstr ""
+"Etykieta wyświetlana w aplikacji bankowej klienta podczas zapisywania sklepu "
+"jako zaufanego. Musi być zgodna z wymaganiami certyfikacji BLIK."
 
 #: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:75
 msgid "Note: This gateway is only visible for PLN currency."
@@ -91,11 +174,11 @@ msgstr "Uwaga: Ta metoda płatności jest dostępna tylko dla waluty PLN."
 msgid "Online payment by BLIK"
 msgstr "Płatność online BLIK"
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:28
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:30
 msgid "Online payment by BLIK Pay Later"
 msgstr "Płatność online BLIK Płacę Później"
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:36
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:38
 msgid "Online payment by PayPo"
 msgstr "Płatność online PayPo"
 
@@ -111,17 +194,84 @@ msgstr "Płatności online → Usługi → Szczegóły → ID usługi"
 msgid "Online payments → Services → Details → Settings → IPN signature key"
 msgstr "Płatności online → Usługi → Szczegóły → Ustawienia → Klucz podpisu IPN"
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/PaymentsService.php:45
+#: ../../../../modules-dev/simpay-wordpress/src/Service/PaymentsService.php:48
 msgid "Order #%d"
 msgstr "Zamówienie nr %d"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:21
+msgid "Pay with BLIK code."
+msgstr "Zapłać kodem BLIK."
 
 #: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:27
 msgid "Pay with SimPay payment gateway."
 msgstr "Zapłać za pomocą bramki płatności SimPay."
 
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:180
+msgid "Pay without code"
+msgstr "Zapłać bez kodu"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:109
+msgid "Payment amount too high."
+msgstr "Kwota płatności jest zbyt wysoka."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:151
+msgid "Payment confirmed. Redirecting to order confirmation…"
+msgstr "Płatność potwierdzona. Przekierowanie do potwierdzenia zamówienia…"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:153
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:101
+msgid ""
+"Payment failed - not confirmed on time in the banking application. Try again."
+msgstr ""
+"Płatność nieudana – nie potwierdzono w czasie w aplikacji bankowej. Spróbuj "
+"ponownie."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:93
+msgid ""
+"Payment failed. Check the reason in the banking application and try again."
+msgstr ""
+"Płatność nieudana. Sprawdź przyczynę w aplikacji bankowej i spróbuj ponownie."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:152
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:113
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:117
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikPaymentHandler.php:278
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:380
+msgid "Payment failed. Try again."
+msgstr "Płatność nieudana. Spróbuj ponownie."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:97
+msgid "Payment rejected in a banking application. Try again."
+msgstr "Płatność odrzucona w aplikacji bankowej. Spróbuj ponownie."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikErrorMessages.php:105
+msgid "Payment requires BLIK code."
+msgstr "Płatność wymaga kodu BLIK."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikPaymentHandler.php:254
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikPaymentHandler.php:269
+msgid "Payment successful!"
+msgstr "Płatność zakończona sukcesem!"
+
 #. Author of the plugin
 msgid "Payments Solution Sp. z o.o."
+msgstr "Payments Solution Sp. z o.o."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Blik/BlikPaymentHandler.php:285
+msgid "Processing payment..."
+msgstr "Przetwarzanie płatności..."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:148
+msgid "Processing your data, please wait."
+msgstr "Przetwarzanie danych, proszę czekać."
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:47
+msgid ""
+"Returning customers can pay with one click after registering their BLIK "
+"alias. Requires BLIK Level 0 to be enabled."
 msgstr ""
+"Powracający klienci mogą płacić jednym kliknięciem po zarejestrowaniu aliasu "
+"BLIK. Wymaga włączenia BLIK Level 0."
 
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:53
 msgid "Service ID"
@@ -137,7 +287,7 @@ msgstr ""
 msgid "SimPay - BLIK"
 msgstr "SimPay – BLIK"
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:27
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:29
 msgid "SimPay - BLIK Pay Later"
 msgstr "SimPay – BLIK Płacę Później"
 
@@ -145,11 +295,12 @@ msgstr "SimPay – BLIK Płacę Później"
 msgid "SimPay - payment gateway"
 msgstr "SimPay – bramka płatności"
 
-#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:35
+#: ../../../../modules-dev/simpay-wordpress/src/Config/Gateways.php:37
 msgid "SimPay - PayPo"
 msgstr "SimPay – PayPo"
 
 #: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:102
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:346
 msgid "SimPay error: Order not found."
 msgstr "Błąd SimPay: Nie znaleziono zamówienia."
 
@@ -161,15 +312,15 @@ msgstr "SimPay – płatności online dla WooCommerce"
 msgid "SimPay payment gateway for WooCommerce."
 msgstr "Bramka płatności SimPay dla WooCommerce."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:75
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:76
 msgid "SimPay refund error: Missing refund ID in API response."
 msgstr "Błąd zwrotu SimPay: Brak identyfikatora zwrotu w odpowiedzi API."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:27
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:28
 msgid "SimPay refund error: Missing transaction ID."
 msgstr "Błąd zwrotu SimPay: Brak identyfikatora transakcji."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:40
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:41
 msgid "SimPay refund error: Nothing left to refund."
 msgstr "Błąd zwrotu SimPay: Brak środków pozostałych do zwrotu."
 
@@ -177,9 +328,9 @@ msgstr "Błąd zwrotu SimPay: Brak środków pozostałych do zwrotu."
 msgid "SimPay refund error: Order not found."
 msgstr "Błąd zwrotu SimPay: Nie znaleziono zamówienia."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:65
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:209
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:219
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:66
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:210
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:220
 msgid ""
 "SimPay refund error: Previous refund request is still waiting for "
 "confirmation. Please wait a moment and try again."
@@ -187,18 +338,18 @@ msgstr ""
 "Błąd zwrotu SimPay: Poprzednie żądanie zwrotu nadal oczekuje na "
 "potwierdzenie. Odczekaj chwilę i spróbuj ponownie."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:52
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:53
 msgid ""
 "SimPay refund error: Refund amount exceeds the remaining refundable amount."
 msgstr ""
 "Błąd zwrotu SimPay: Kwota zwrotu przekracza pozostałą kwotę możliwą do "
 "zwrotu."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:48
+#: ../../../../modules-dev/simpay-wordpress/src/Service/RefundsService.php:49
 msgid "SimPay refund error: Refund amount must be greater than zero."
 msgstr "Błąd zwrotu SimPay: Kwota zwrotu musi być większa od zera."
 
-#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:90
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:97
 msgid "SimPay requires WooCommerce to be installed and active."
 msgstr "SimPay wymaga zainstalowanego i aktywnego WooCommerce."
 
@@ -225,6 +376,10 @@ msgstr ""
 msgid "Title of payment method"
 msgstr "Tytuł metody płatności"
 
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:154
+msgid "Try again"
+msgstr "Spróbuj ponownie"
+
 #: ../../../../modules-dev/simpay-wordpress/src/Gateways/SimPayGateways.php:51
 msgid "Turn on / Turn off"
 msgstr "Włącz / Wyłącz"
@@ -237,9 +392,17 @@ msgstr "Włącz metodę płatności"
 msgid "Verify incoming IP address in IPN notifications"
 msgstr "Weryfikuj adres IP w przychodzących powiadomieniach IPN"
 
+#: ../../../../modules-dev/simpay-wordpress/src/Plugin.php:150
+msgid "Waiting for confirmation in your banking app…"
+msgstr "Oczekiwanie na potwierdzenie w aplikacji bankowej…"
+
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:59
 msgid "Webhooks"
 msgstr "Webhooki"
+
+#: ../../../../modules-dev/simpay-wordpress/src/Gateways/Blik.php:223
+msgid "You can find the BLIK code in your banking app"
+msgstr "Kod BLIK znajdziesz w aplikacji bankowej"
 
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:72
 msgid "You do not have permission to access this page."

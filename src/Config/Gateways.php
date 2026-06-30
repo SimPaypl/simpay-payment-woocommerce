@@ -18,9 +18,11 @@ final class Gateways
                 'class' => \SimPay\WooCommerce\Gateways\Blik::class,
                 'name' => __('SimPay - BLIK', 'simpay'),
                 'front_name' => __('Online payment by BLIK', 'simpay'),
-                'default_description' => '',
+                'default_description' => __('Pay with BLIK code.', 'simpay'),
                 'default_enabled' => 'no',
-                'api' => 'blik'
+                'api' => 'blik',
+                'supports_level0' => true,
+                'supports_oneclick' => true,
             ],
             'simpay_blik_pay_later' => [
                 'class' => \SimPay\WooCommerce\Gateways\BlikPayLater::class,

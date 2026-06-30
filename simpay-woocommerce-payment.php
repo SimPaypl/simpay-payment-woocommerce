@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WC_SIMPAY_VERSION', '1.2.0' );
+define( 'WC_SIMPAY_VERSION', '1.3.0' );
 define( 'WC_SIMPAY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WC_SIMPAY_URL', plugin_dir_url( __FILE__ ) );
 define( 'WC_SIMPAY_FILE', __FILE__ );
@@ -26,6 +26,13 @@ define( 'WC_SIMPAY_BASENAME', plugin_basename( __FILE__ ) );
 
 require WC_SIMPAY_PATH . 'vendor/autoload.php';
 
+// Install/upgrade database tables on activation
+register_activation_hook( __FILE__, function () {
+    \SimPay\WooCommerce\Database\Installer::install();
+});
+
 add_action( 'plugins_loaded', function () {
+    // Check DB version on every load (handles manual updates without re-activation)
+    \SimPay\WooCommerce\Database\Installer::install();
     \SimPay\WooCommerce\Plugin::run();
-} );
+});
