@@ -407,3 +407,173 @@ msgstr "Kod BLIK znajdziesz w aplikacji bankowej"
 #: ../../../../modules-dev/simpay-wordpress/src/Settings/SimPayGlobalSettings.php:72
 msgid "You do not have permission to access this page."
 msgstr "Nie masz uprawnień do dostępu do tej strony."
+
+#: src/Settings/SimPayGlobalSettings.php
+msgid "Commission paid by"
+msgstr "Prowizja płacona przez"
+
+#: src/Settings/SimPayGlobalSettings.php
+msgid "Merchant"
+msgstr "Sklep"
+
+#: src/Settings/SimPayGlobalSettings.php
+msgid "Payer"
+msgstr "Kupujący"
+
+#: src/Settings/SimPayGlobalSettings.php
+msgid ""
+"Choose who pays the transaction commission — the merchant or the payer. In "
+"payer mode the commission is added to the payment amount and the customer is "
+"informed about it at checkout."
+msgstr ""
+"Wybierz, kto pokrywa prowizję transakcyjną — sklep czy kupujący. W trybie "
+"kupującego prowizja jest doliczana do kwoty płatności, a klient jest o tym "
+"informowany przy składaniu zamówienia."
+
+#: src/Service/CommissionService.php src/Blocks/SimPayBlocksSupport.php
+msgid ""
+"A transaction fee will be added to the payment amount. The exact amount will "
+"be shown on the payment gateway."
+msgstr ""
+"Do kwoty płatności zostanie doliczona opłata transakcyjna. Dokładna kwota "
+"zostanie wyświetlona na stronie bramki płatności."
+
+#: src/Service/CommissionService.php
+msgid "Transaction fee"
+msgstr "Opłata transakcyjna"
+
+#: src/Service/CommissionService.php
+msgid ""
+"A transaction fee was charged during payment. This fee was visible at "
+"checkout and on the payment gateway."
+msgstr ""
+"Podczas płatności została pobrana opłata transakcyjna. Opłata była widoczna "
+"przy składaniu zamówienia oraz na bramce płatności."
+
+#: src/Service/PaymentsService.php
+msgid ""
+"SimPay: Transaction commission is paid by the payer (added to the payment "
+"amount on the gateway)."
+msgstr ""
+"SimPay: Prowizję transakcyjną pokrywa kupujący (doliczona do kwoty płatności "
+"na bramce)."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Payment settings"
+msgstr "Ustawienia płatności"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connect via SimPay (recommended)"
+msgstr "Połącz przez SimPay (zalecane)"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Enter credentials manually"
+msgstr "Wprowadź dane ręcznie"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Your shop is connected to SimPay."
+msgstr "Twój sklep jest połączony z SimPay."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Account:"
+msgstr "Konto:"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Payment service:"
+msgstr "Usługa płatności:"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Log in to your SimPay account and grant access - the plugin will automatically create an API key, set the IPN URL and configure the IPN signature key. No copying of keys required."
+msgstr "Zaloguj się na swoje konto SimPay i udziel dostępu – wtyczka automatycznie utworzy klucz API, ustawi adres IPN i skonfiguruje klucz podpisu IPN. Bez ręcznego kopiowania kluczy."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connecting via SimPay requires the shop admin panel to be served over HTTPS. Enter the credentials manually instead."
+msgstr "Połączenie przez SimPay wymaga, aby panel sklepu działał po HTTPS. Wprowadź dane ręcznie."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Detected callback URL:"
+msgstr "Wykryty adres powrotu:"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Reconnect / change service"
+msgstr "Połącz ponownie / zmień usługę"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connect with SimPay"
+msgstr "Połącz z SimPay"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Are you sure you want to disconnect the shop from SimPay? SimPay payments will stop working until you connect again."
+msgstr "Czy na pewno chcesz odłączyć sklep od SimPay? Płatności SimPay przestaną działać do czasu ponownego połączenia."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Disconnect"
+msgstr "Rozłącz"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Select a SimPay payment service"
+msgstr "Wybierz usługę płatności SimPay"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connected SimPay account:"
+msgstr "Połączone konto SimPay:"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Choose the payment service this shop should use:"
+msgstr "Wybierz usługę płatności, z której ma korzystać ten sklep:"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "The plugin will create a new API key, set the IPN URL and generate a new IPN signature key for the selected service. The previous IPN signature key will stop working immediately - if this service is also used by another shop or integration, update it there as well."
+msgstr "Wtyczka utworzy nowy klucz API, ustawi adres IPN i wygeneruje nowy klucz podpisu IPN dla wybranej usługi. Poprzedni klucz podpisu IPN natychmiast przestanie działać – jeśli ta usługa jest używana także przez inny sklep lub integrację, zaktualizuj go również tam."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connect selected service"
+msgstr "Połącz wybraną usługę"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+#, php-format
+msgid "The shop has been connected to SimPay service \"%s\". API key, IPN URL and IPN signature key were configured automatically."
+msgstr "Sklep został połączony z usługą SimPay „%s”. Klucz API, adres IPN oraz klucz podpisu IPN zostały skonfigurowane automatycznie."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "The shop has been disconnected from SimPay. SimPay payments will not work until you connect again or enter the credentials manually."
+msgstr "Sklep został odłączony od SimPay. Płatności SimPay nie będą działać, dopóki nie połączysz się ponownie lub nie wprowadzisz danych ręcznie."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Connection with SimPay was cancelled."
+msgstr "Połączenie z SimPay zostało anulowane."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+#, php-format
+msgid "SimPay authorization failed: %s"
+msgstr "Autoryzacja SimPay nie powiodła się: %s"
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Invalid or expired SimPay authorization. Please try connecting again."
+msgstr "Nieprawidłowa lub wygasła autoryzacja SimPay. Spróbuj połączyć się ponownie."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "No active payment services were found on your SimPay account. Create a payment service in the SimPay panel first."
+msgstr "Na Twoim koncie SimPay nie znaleziono aktywnych usług płatności. Najpierw utwórz usługę płatności w panelu SimPay."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "The SimPay authorization has expired. Please connect again."
+msgstr "Autoryzacja SimPay wygasła. Połącz się ponownie."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+msgid "Please select a payment service."
+msgstr "Wybierz usługę płatności."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+#, php-format
+msgid "The selected service uses IPN version %s, but this plugin supports IPN 2.0 only. Change the IPN version to 2.0 in the service settings in the SimPay panel, then select the service again. Nothing was changed."
+msgstr "Wybrana usługa korzysta z IPN w wersji %s, a wtyczka obsługuje wyłącznie IPN 2.0. Zmień wersję IPN na 2.0 w ustawieniach usługi w panelu SimPay i wybierz usługę ponownie. Niczego nie zmieniono."
+
+#: src/OAuth/OAuthController.php src/Settings/SimPayGlobalSettings.php
+#, php-format
+msgid "Could not connect to SimPay: %s"
+msgstr "Nie udało się połączyć z SimPay: %s"

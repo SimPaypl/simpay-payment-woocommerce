@@ -5,6 +5,7 @@ namespace SimPay\WooCommerce\Gateways;
 use SimPay\WooCommerce\Config\Gateways;
 use SimPay\WooCommerce\Factory\SimPayFactory;
 use SimPay\WooCommerce\Database\BlikAliasRepository;
+use SimPay\WooCommerce\Service\CommissionService;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -95,6 +96,15 @@ class Blik extends SimPayGateways
     }
 
     /**
+     * BLIK Level 0 / OneClick transactions are always created in merchant commission mode
+     * (required by the SimPay API), so the payer is not charged a fee and no notice is shown.
+     */
+    protected function render_commission_notice(): void
+    {
+        echo CommissionService::renderCheckoutNotice($this->get_direct_channel(), Gateways::get($this->id, 'api'));
+    }
+
+    /**
      * Render BLIK payment fields on checkout page.
      *
      * Implements BLIK Level 0 & OneClick certification checklist:
@@ -113,6 +123,8 @@ class Blik extends SimPayGateways
         if ($this->description) {
             echo '<p>' . wp_kses_post($this->description) . '</p>';
         }
+
+        $this->render_commission_notice();
 
         if (!$this->is_blik_level0_enabled()) {
             return;

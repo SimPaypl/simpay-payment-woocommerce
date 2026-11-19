@@ -5,7 +5,7 @@
  * Plugin URI: https://simpay.pl
  * GitHub Plugin URI: https://github.com/SimPaypl/simpay-payment-woocommerce
  * Description: Accept fast and secure online payments with SimPay – BLIK, online transfers and instant payments. Easy integration and smooth checkout for your customers.
- * Version: 1.1.0
+ * Version: 1.4.0
  * Author: Payments Solution Sp. z o.o.
  * Author URI: https://simpay.pl
  * License: GPL-2.0+
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WC_SIMPAY_VERSION', '1.3.0' );
+define( 'WC_SIMPAY_VERSION', '1.4.0' );
 define( 'WC_SIMPAY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WC_SIMPAY_URL', plugin_dir_url( __FILE__ ) );
 define( 'WC_SIMPAY_FILE', __FILE__ );

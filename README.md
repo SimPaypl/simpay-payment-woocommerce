@@ -46,6 +46,7 @@ Moduł został przygotowany dla sklepów rozliczanych w **PLN**. Jeśli waluta s
 - **BLIK OneClick** – powracający klienci płacą bez kodu (potwierdzenie w aplikacji bankowej),
 - zapis identyfikatora transakcji SimPay w zamówieniu WooCommerce,
 - obsługa webhooków / IPN dla płatności, zwrotów i statusów aliasów BLIK,
+- wybór **trybu prowizji** – sklep (merchant) lub kupujący (payer) pokrywa opłatę transakcyjną, z informacją o kwocie opłaty w checkout,
 - możliwość inicjowania zwrotów z poziomu panelu WooCommerce,
 - zgodność z klasycznym checkoutem WooCommerce,
 - przygotowana integracja z WooCommerce Blocks,
@@ -118,6 +119,34 @@ WooCommerce → Ustawienia SimPay
 
 W tym miejscu skonfigurujesz dane globalne wykorzystywane przez wszystkie metody płatności.
 
+Połączenie z SimPay można skonfigurować na dwa sposoby:
+
+### Połącz przez SimPay (zalecane)
+
+Automatyczna konfiguracja bez kopiowania kluczy (OAuth):
+
+1. W zakładce **Połącz przez SimPay (zalecane)** kliknij **Połącz z SimPay**.
+2. Zaloguj się na konto SimPay i udziel dostępu.
+3. Po powrocie do sklepu wybierz usługę płatności (wtyczka podpowiada usługę, której adres pasuje do domeny sklepu) i kliknij **Połącz wybraną usługę**.
+
+Wtyczka automatycznie:
+
+- tworzy nowy klucz API dla wybranej usługi,
+- ustawia adres IPN sklepu w usłudze,
+- generuje nowy klucz podpisu IPN i zapisuje wszystkie dane w ustawieniach.
+
+> ⚠️ Wygenerowanie nowego klucza IPN unieważnia poprzedni od razu. Jeśli ta sama usługa jest używana przez inny sklep lub integrację, trzeba ją tam zaktualizować.
+
+Wymagania i uwagi:
+
+- panel sklepu musi działać po **HTTPS** (wyjątek: `localhost` / `127.0.0.1`). W przeciwnym razie przycisk jest niedostępny i dane trzeba wpisać ręcznie,
+- usługa musi mieć ustawioną wersję **IPN 2.0** – dla IPN 1.0 połączenie jest przerywane, zanim cokolwiek zostanie zmienione,
+- **Rozłącz** usuwa dane dostępowe ze sklepu; klucz API pozostaje w panelu SimPay (API nie pozwala go usunąć) i można go usunąć ręcznie.
+
+### Wprowadź dane ręcznie
+
+W zakładce **Wprowadź dane ręcznie** podaj poniższe dane skopiowane z panelu SimPay.
+
 ### Wymagane pola konfiguracji
 
 #### 1. ID usługi
@@ -151,6 +180,23 @@ Płatności online → Usługi → Szczegóły → Ustawienia → Klucz podpisu 
 Opcjonalna weryfikacja adresu IP nadawcy webhooków / IPN.
 
 > Jeśli sklep działa za Cloudflare lub innym reverse proxy, włączenie tej opcji może powodować odrzucanie notyfikacji. W takim przypadku zalecamy pozostawić tę opcję wyłączoną.
+
+#### 5. Prowizja płacona przez
+Określa, kto pokrywa prowizję transakcyjną SimPay:
+
+- **Sklep (merchant)** – domyślnie. Klient płaci dokładnie kwotę zamówienia i nie widzi żadnych dodatkowych opłat.
+- **Kupujący (payer)** – prowizja jest doliczana do kwoty płatności na bramce SimPay.
+
+W trybie **Kupujący** klient widzi w checkout informację o opłacie transakcyjnej:
+
+- dla bramek z konkretnym kanałem (BLIK, BLIK Płacę Później, PayPo) – dokładną kwotę opłaty, wyliczoną z prowizji kanału (procent + opłata stała, z uwzględnieniem minimalnej prowizji) i aktualnej sumy koszyka,
+- dla głównej bramki SimPay (kanał wybierany na stronie płatności) oraz w checkoutcie blokowym – ogólną informację, że opłata zostanie doliczona, a jej dokładna kwota będzie widoczna na bramce.
+
+> **BLIK Level 0 i OneClick** (kod BLIK wpisywany w sklepie / płatność bez kodu) działają zawsze w trybie **Sklep (merchant)** – API SimPay nie przyjmuje płatności BLIK Level 0 dla transakcji w trybie payer. Prowizję za te płatności pokrywa sklep, a klient nie widzi przy BLIK informacji o opłacie. Gdy BLIK Level 0 jest wyłączony (BLIK przez przekierowanie), obowiązuje wybrany tryb.
+
+Tryb prowizji jest zapisywany w zamówieniu, a klient widzi informację o pobranej opłacie na stronie szczegółów zamówienia. Stawki prowizji kanałów są pobierane z API SimPay i przechowywane w cache przez godzinę (cache jest czyszczony po zapisaniu ustawień).
+
+> Kwota zamówienia w WooCommerce pozostaje bez zmian – prowizja nie jest dodawana jako pozycja zamówienia.
 
 ### Włączenie metod płatności
 

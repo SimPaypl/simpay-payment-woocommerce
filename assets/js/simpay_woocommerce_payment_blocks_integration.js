@@ -1,6 +1,21 @@
 const { registerPaymentMethod } = window.wc?.wcBlocksRegistry ?? {};
 const { createElement } = window.wp?.element ?? {};
 const { __ } = window.wp?.i18n ?? {};
+const { getSetting } = window.wc?.wcSettings ?? {};
+
+const simpayData = getSetting ? getSetting('simpay_payment_gateway_data', {}) : {};
+
+function simpayContent() {
+    const children = [
+        createElement('p', { key: 'desc' }, __('Zapłać przez SimPay.pl', 'simpay_woocommerce_payment')),
+    ];
+
+    if (simpayData.commissionNotice) {
+        children.push(createElement('div', { key: 'fee', className: 'simpay-commission-notice' }, simpayData.commissionNotice));
+    }
+
+    return createElement('div', null, children);
+}
 
 if (!registerPaymentMethod) {
     console.error('registerPaymentMethod missing — blocks not loaded');
@@ -14,11 +29,7 @@ registerPaymentMethod({
         showSavedCards: false,
         tokenize: false,
     },
-    content: createElement(
-        'p',
-        null,
-        __('Zapłać przez SimPay.pl', 'simpay_woocommerce_payment')
-    ),
+    content: simpayContent(),
     edit: null,
     canMakePayment: function () {
         return true;

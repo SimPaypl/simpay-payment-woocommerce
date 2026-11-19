@@ -4,6 +4,7 @@ namespace SimPay\WooCommerce\Gateways;
 
 use SimPay\WooCommerce\Config\Gateways;
 use SimPay\WooCommerce\Factory\SimPayFactory;
+use SimPay\WooCommerce\Service\CommissionService;
 
 abstract class SimPayGateways extends \WC_Payment_Gateway
 {
@@ -33,8 +34,24 @@ abstract class SimPayGateways extends \WC_Payment_Gateway
     {
         $this->method_title = Gateways::get($this->id, 'name');
         $this->method_description = __('SimPay payment gateway for WooCommerce.', 'simpay');
-        $this->has_fields = false;
+        // In payer commission mode the payment box must render to show the fee notice.
+        $this->has_fields = CommissionService::isPayerMode();
         $this->supports = ['products', 'refunds'];
+    }
+
+    public function payment_fields()
+    {
+        parent::payment_fields();
+        $this->render_commission_notice();
+    }
+
+    /**
+     * Fee notice for the payer commission mode. The checkout re-renders payment fields on every
+     * cart/shipping update, so the fee is always calculated for the current total.
+     */
+    protected function render_commission_notice(): void
+    {
+        echo CommissionService::renderCheckoutNotice(Gateways::get($this->id, 'api'));
     }
 
     public function init_form_fields()

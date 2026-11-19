@@ -50,8 +50,10 @@ class OrderService
         }
 
         $orderTotal = (float) $order->get_total();
-        $paidAmount = (float) ($ipn->data['amount']['final_value'] ?? $ipn->getAmount());
-        $paidCurrency = (string) ($ipn->data['amount']['final_currency'] ?? $ipn->getCurrency());
+        // SDK >= 1.1: getAmount() is amount.original_value - the amount in the shop's currency, without
+        // conversion (final_value) - so it is the value to compare against the order total.
+        $paidAmount = $ipn->getAmount();
+        $paidCurrency = $ipn->getCurrency();
 
         // Amount must not be lower than expected
         if (!AmountVerifier::isAmountSufficient($orderTotal, $paidAmount)) {
@@ -88,7 +90,8 @@ class OrderService
      */
     public function handleRefundStatusChanged(IpnPayload $ipn): void
     {
-        if ($ipn->getStatus() !== PaymentStatus::REFUND_COMPLETED) {
+        $status = $ipn->getStatus();
+        if (!in_array($status, [PaymentStatus::REFUND_COMPLETED, PaymentStatus::REFUND_FAILED], true)) {
             return;
         }
 
@@ -99,13 +102,6 @@ class OrderService
 
         $simpayRefundId = (string) ($ipn->data['id'] ?? '');
         if ($simpayRefundId === '') {
-            return;
-        }
-
-        $refundAmount   = $ipn->getAmount();
-        $refundCurrency = $ipn->getCurrency();
-
-        if ($refundAmount <= 0) {
             return;
         }
 
@@ -122,10 +118,42 @@ class OrderService
 
         $order = $orders[0];
 
+        if ($status === PaymentStatus::REFUND_FAILED) {
+            $this->refunds->handleRemoteRefundFailure($order, $simpayRefundId);
+            return;
+        }
+
+        if ($this->refunds->isRefundFailed($order, $simpayRefundId)) {
+            // Failed is terminal; a late/contradictory completion must not re-create the refund.
+            error_log(sprintf(
+                'SimPay: Ignoring refund_completed for refund %s already marked as failed (order #%d).',
+                $simpayRefundId,
+                $order->get_id()
+            ));
+            return;
+        }
+
+        $refundAmount   = $ipn->getAmount();
+        $refundCurrency = $ipn->getCurrency();
+
+        if ($refundAmount <= 0) {
+            return;
+        }
+
         $existingRefund = $this->refunds->findRefundByRemoteId($order, $simpayRefundId);
 
         if ($existingRefund instanceof \WC_Order_Refund) {
             $currentStatus = (string) $existingRefund->get_meta('_simpay_refund_status');
+            if ($currentStatus === 'failed') {
+                // Failure handling was interrupted before cleanup finished; do not flip it to completed.
+                error_log(sprintf(
+                    'SimPay: Ignoring refund_completed for refund %s marked as failed (order #%d).',
+                    $simpayRefundId,
+                    $order->get_id()
+                ));
+                return;
+            }
+
             if ($currentStatus !== PaymentStatus::REFUND_COMPLETED) {
                 $this->refunds->syncRefundMeta(
                     $existingRefund,

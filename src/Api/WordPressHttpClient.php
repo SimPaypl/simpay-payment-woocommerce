@@ -21,7 +21,6 @@ final class WordPressHttpClient implements HttpClientInterface
 
         if ($body !== null) {
             $args['body'] = wp_json_encode($body);
-            error_log('SimPay HTTP ' . strtoupper($method) . ' ' . $url . ' PAYLOAD: ' . $args['body']);
         }
 
         $res = wp_remote_request($url, $args);

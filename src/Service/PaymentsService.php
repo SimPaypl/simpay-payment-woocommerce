@@ -30,8 +30,14 @@ class PaymentsService
                 'result' => 'failure',
             );
         }
+        $commissionMode = CommissionService::modeForChannel($gatewayIdChannel);
+
         $order->add_order_note('SimPay ID: ' . $txId, 1);
+        if ($commissionMode === CommissionService::MODE_PAYER) {
+            $order->add_order_note(__('SimPay: Transaction commission is paid by the payer (added to the payment amount on the gateway).', 'simpay'));
+        }
         $order->update_meta_data('_simpay_transaction_id', $txId);
+        $order->update_meta_data(CommissionService::ORDER_META, $commissionMode);
         $order->update_status('pending', 'Awaiting SimPay payment');
         $order->save();
 
@@ -73,7 +79,8 @@ class PaymentsService
                 $order->get_shipping_country(),
                 $order->get_shipping_company()
             )
-            ->setReturnUrls($returnUrl, $returnUrl, $returnUrl);
+            ->setReturnUrls($returnUrl, $returnUrl, $returnUrl)
+            ->setCommissionMode(CommissionService::modeForChannel($gatewayIdChannel));
 
         if (!empty($gatewayIdChannel)) {
             $builder->setDirectChannel($gatewayIdChannel);

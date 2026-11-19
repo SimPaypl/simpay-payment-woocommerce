@@ -5,6 +5,8 @@ namespace SimPay\WooCommerce;
 use SimPay\WooCommerce\Config\Gateways;
 use SimPay\WooCommerce\Factory\SimPayFactory;
 use SimPay\WooCommerce\IPN\IPNController;
+use SimPay\WooCommerce\OAuth\OAuthController;
+use SimPay\WooCommerce\Service\CommissionService;
 use SimPay\WooCommerce\Settings\SimPayGlobalSettings;
 use SimPay\WooCommerce\Blocks\SimPayBlocksSupport;
 use SimPay\WooCommerce\Update\PluginUpdateChecker;
@@ -47,9 +49,14 @@ class Plugin
         // BLIK Level 0 frontend scripts
         add_action('wp_enqueue_scripts', [self::class, 'enqueue_blik_scripts']);
 
+        // Commission paid by payer: checkout notice styles + info on the customer's order page
+        add_action('wp_enqueue_scripts', [self::class, 'enqueue_commission_styles']);
+        add_action('woocommerce_order_details_after_order_table', [self::class, 'render_order_commission_notice']);
+
         // Display settings page in admin
         if (is_admin()) {
             new SimPayGlobalSettings();
+            OAuthController::register();
         }
     }
 
@@ -96,6 +103,30 @@ class Plugin
         echo '<div class="notice notice-error"><p>';
         echo esc_html__('SimPay requires WooCommerce to be installed and active.', 'simpay');
         echo '</p></div>';
+    }
+
+    public static function enqueue_commission_styles(): void
+    {
+        // Checkout (incl. order-pay / order-received) and My Account → order view.
+        if (!function_exists('is_checkout') || (!is_checkout() && !is_account_page())) {
+            return;
+        }
+
+        wp_enqueue_style(
+            'simpay-checkout',
+            WC_SIMPAY_URL . 'assets/css/simpay-checkout.css',
+            [],
+            WC_SIMPAY_VERSION
+        );
+    }
+
+    public static function render_order_commission_notice($order): void
+    {
+        if (!$order instanceof \WC_Order || !CommissionService::isPaidByPayer($order)) {
+            return;
+        }
+
+        echo '<div class="simpay-commission-notice">' . esc_html(CommissionService::orderNoticeText()) . '</div>';
     }
 
     public static function enqueue_blik_scripts(): void
